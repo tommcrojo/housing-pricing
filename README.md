@@ -12,10 +12,11 @@ El modelo transforma variables geoespaciales y socioeconómicas en predicciones 
 
 ## 🔧 Tecnologías utilizadas
 
-- **Lenguajes**: Python 3.8+
+- **Lenguajes**: Python 3.x
 - **Análisis de datos**: Pandas, NumPy, Matplotlib, Seaborn
 - **Machine Learning**: Scikit-learn (Random Forest, Linear Regression)
-- **Modelado**: Cross-validation, Grid Search, métricas de regresión
+- **Optimización**: GridSearchCV, validación cruzada (5-fold)
+- **Preprocesamiento**: StandardScaler, transformaciones logarítmicas, one-hot encoding
 - **Entorno**: Jupyter Notebooks
 
 ## 🏗️ Arquitectura y metodología
@@ -23,45 +24,43 @@ El modelo transforma variables geoespaciales y socioeconómicas en predicciones 
 El proyecto sigue un pipeline estructurado de ML:
 
 1. **Exploración de datos**:
-   - Análisis de distribuciones y outliers
+   - Análisis de distribuciones y valores nulos
    - Matriz de correlación de variables
-   - Visualización geoespacial de precios
+   - Identificación de la alta correlación entre ingresos medianos y precio (0.69)
 
 2. **Preprocesamiento**:
-   - Transformación logarítmica de distribuciones sesgadas
-   - One-hot encoding de variables categóricas
-   - Escalado de variables numéricas
+   - Transformación logarítmica de variables numéricas sesgadas (total_rooms, total_bedrooms, population, households)
+   - One-hot encoding de 'ocean_proximity' (5 categorías)
+   - Escalado de variables mediante StandardScaler
 
 3. **Feature Engineering**:
-   - Creación de ratios personalizados (dormitorios/habitación, habitaciones/hogar)
-   - Integración de variables geoespaciales
-   - Análisis de proximidad al océano
+   - Creación de 'bedroom_ratio' (total_bedrooms/total_rooms)
+   - Desarrollo de 'household_rooms' (total_rooms/households)
 
 4. **Modelado**:
-   - Entrenamiento de regresión lineal (baseline)
-   - Implementación de Random Forest Regressor
-   - Optimización de hiperparámetros mediante Grid Search con validación cruzada
+   - Implementación de regresión lineal como baseline (R² = 0.68)
+   - Entrenamiento de Random Forest Regressor con y sin escalado
+   - Optimización mediante GridSearchCV con 36 combinaciones de hiperparámetros
 
 5. **Evaluación**:
-   - Comparativa de modelos
-   - Análisis de métricas (MSE, RMSE, R²)
-   - Interpretación de importancia de variables
+   - Comparación de rendimiento entre modelos
+   - Evaluación en conjunto de test (25% de los datos)
 
 ## 📊 Resultados y métricas
 
-- **Precisión del modelo**: R² = 0.81 en datos de test
-- **Mejora sobre baseline**: +14% vs. regresión lineal (R² = 0.67)
-- **Feature engineering**: Incremento del 15% en capacidad predictiva mediante variables derivadas
-- **Variables más relevantes**: Proximidad al océano (+0.62), ingresos medianos (+0.47), latitud (-0.36)
-- **Error medio**: 8% sobre el valor real de las propiedades
+- **Precisión del mejor modelo**: R² = 0.83 (Random Forest con escalado)
+- **Mejora sobre baseline**: +15% vs. regresión lineal (R² = 0.68)
+- **GridSearchCV**: Optimización con 36 combinaciones de hiperparámetros (n_estimators, min_samples_split, max_depth)
+- **Variables más relevantes**: Los ingresos medianos mostraron la mayor correlación (0.69) con el precio inmobiliario
+- **Dataset**: 20,433 registros después de eliminar valores nulos (~200 filas)
 
 ## 🚀 Próximos pasos
 
-- Integrar datos temporales para capturar tendencias de mercado
-- Implementar modelos de ensemble más complejos (XGBoost, LightGBM)
-- Desarrollar API para consultas en tiempo real
-- Añadir visualizaciones interactivas mediante Plotly
-- Experimentar con técnicas avanzadas de feature selection
+- Implementar técnicas avanzadas de feature selection
+- Explorar modelos de ensemble adicionales (XGBoost, Gradient Boosting)
+- Añadir análisis de importancia de características
+- Implementar visualizaciones geoespaciales para representar la distribución de precios
+- Experimentar con estrategias de validación temporal para simular predicciones en el mundo real
 
 ## 📝 Licencia
 
@@ -69,4 +68,4 @@ MIT
 
 ---
 
-*Este proyecto forma parte de mi portfolio de Data Science y está abierto a contribuciones y sugerencias.*
+*Este proyecto forma parte de mi portfolio de Data Science & ML y está abierto a contribuciones y sugerencias.*
